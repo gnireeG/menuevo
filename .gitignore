@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.env
+*.local
+
+# TanStack Router codegen (wird bei jedem dev/build neu erzeugt)
+apps/web/src/routeTree.gen.ts
+
+# Generierter API-Client - bewusst NICHT ignorieren, siehe README
+# (auskommentiert lassen, damit Reviewer den generierten Diff sehen)
+# packages/shared-types/src/generated/
+
+.DS_Store
+*.log

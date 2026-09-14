@@ -1,0 +1,25 @@
+{
+  "name": "menuevo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@10.34.5",
+  "scripts": {
+    "dev": "pnpm --parallel --filter=./apps/* dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api start:dev",
+    "build": "pnpm --filter shared-types build && pnpm --recursive --filter=./apps/* build",
+    "lint": "pnpm --recursive lint",
+    "typecheck": "pnpm --recursive typecheck",
+    "generate:api-client": "pnpm --filter shared-types generate:api-client",
+    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  }
+}
