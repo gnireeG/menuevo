@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789363817359,
+      "tag": "0000_perfect_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789364262254,
+      "tag": "0001_long_doorman",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789400393058,
+      "tag": "0002_bumpy_marvel_zombies",
+      "breakpoints": true
+    }
+  ]
+}

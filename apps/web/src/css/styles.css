@@ -1,0 +1,27 @@
+
+@import "tailwindcss";
+@import './globals.css';
+
+* {
+  box-sizing: border-box;
+}
+
+@theme{
+  
+  --shadow-dark: 8px 8px 0px 0px var(--color-shadow);
+  --shadow-dark-active: 4px 4px 0px 0px var(--color-shadow);
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+button:not(:disabled){
+  cursor: pointer;
+}
