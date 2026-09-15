@@ -1,3 +1,4 @@
+import OrganizationSelector from "./OrganizationSelector";
 import UserMenu from "./Usermenu";
 
 export default function Navbar(){
@@ -6,7 +7,8 @@ export default function Navbar(){
             <div>
                 <img src="/logo-menuevo-dark.svg" className="h-6" />
             </div>
-            <div>
+            <div className="flex flex-col gap-2 w-full">
+                <OrganizationSelector />
                 <UserMenu />
             </div>
         </nav>

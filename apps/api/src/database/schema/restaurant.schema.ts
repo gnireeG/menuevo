@@ -2,13 +2,13 @@ import { boolean, json, pgEnum, uuid } from "drizzle-orm/pg-core";
 import { text } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
 import { themes } from "./theme.schema.js";
-import { user } from "./auth.schema.js";
+import { organization, user } from "./auth.schema.js";
 
 export const wlanEncryptionEnum = pgEnum('wlan_encryption', ['wpa', 'wep', 'nopass']);
 
 export const restaurants = pgTable('restaurants', {
     id: uuid('id').primaryKey().defaultRandom(),
-    owner_id: uuid('owner_id').references(() => user.id, {onDelete: 'set null'}),
+    owner_id: text('owner_id').references(() => user.id, {onDelete: 'set null'}),
     name: text('name').notNull(),
     slug: text('slug').unique(),
     street: text('street'),
@@ -30,4 +30,5 @@ export const restaurants = pgTable('restaurants', {
     wlan_ssid: text('wlan_ssid'),
     wlan_password: text('wlan_password'),
     wlan_encryption: wlanEncryptionEnum(),
+    organizationId: text('organization_id').notNull().unique().references(() => organization.id, { onDelete: 'cascade' }),
 })

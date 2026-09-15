@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import type { Request } from 'express';
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
 import { RestaurantsService } from './restaurants.service.js';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto.js';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto.js';
@@ -12,8 +14,8 @@ export class RestaurantsController {
 
   @Post()
   @ApiCreatedResponse({ type: RestaurantResponseDto })
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantsService.create(createRestaurantDto);
+  create(@Body() createRestaurantDto: CreateRestaurantDto, @Session() session: UserSession, @Req() request: Request) {
+    return this.restaurantsService.create(createRestaurantDto, session.user.id, request.headers);
   }
 
   @Get()

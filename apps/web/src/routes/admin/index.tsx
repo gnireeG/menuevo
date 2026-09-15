@@ -25,7 +25,12 @@ function RouteComponent() {
   return(
     <div>
       hallo welt.
-      <p>restuarants: {JSON.stringify(data)}</p>
+      <p>restuarants:</p>
+      <ul>
+        {data?.data.map(org => (
+          <li key={org.id}>{org.name}</li>
+        ))}
+      </ul>
       <div>
         create:
         <form onSubmit={(e) =>{

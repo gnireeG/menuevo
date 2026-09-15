@@ -29,6 +29,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@better-auth/i18n": "^1.7.5",
     "@nestjs/common": "^12.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^12.0.1",

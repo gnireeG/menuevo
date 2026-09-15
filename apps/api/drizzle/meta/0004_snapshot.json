@@ -1,6 +1,6 @@
 {
-  "id": "c0d6a69e-eef8-4bd6-ba3e-4e9feaa2f237",
-  "prevId": "1b084fc5-f579-45d9-a6a2-5ffbbfe7f7af",
+  "id": "267115cd-9474-42e1-8957-a4f4e7e9748d",
+  "prevId": "c0d6a69e-eef8-4bd6-ba3e-4e9feaa2f237",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -820,6 +820,12 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
+        },
+        "organization_id": {
+          "name": "organization_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -849,6 +855,19 @@
           ],
           "onDelete": "set null",
           "onUpdate": "no action"
+        },
+        "restaurants_organization_id_organization_id_fk": {
+          "name": "restaurants_organization_id_organization_id_fk",
+          "tableFrom": "restaurants",
+          "tableTo": "organization",
+          "columnsFrom": [
+            "organization_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -858,6 +877,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "slug"
+          ]
+        },
+        "restaurants_organization_id_unique": {
+          "name": "restaurants_organization_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organization_id"
           ]
         }
       },

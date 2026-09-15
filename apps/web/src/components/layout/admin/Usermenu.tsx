@@ -28,7 +28,7 @@ export default function UserMenu(){
         {user && (
             <DropdownMenu>
                 <DropdownMenuTrigger className="w-full" asChild>
-                    <Button variant="ghost" className="w-full">{user.name}<CaretUpDownIcon /></Button>
+                    <Button className="w-full" shadow={false}>{user.name}<CaretUpDownIcon /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] p-4">
                     <div>
