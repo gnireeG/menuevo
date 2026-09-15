@@ -9,9 +9,12 @@
     "typecheck": "tsc --noEmit",
     "generate:api-client": "orval --config orval.config.ts"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/node": "^26.5.1",
     "orval": "^7.5.0",
     "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.102.8"
   }
 }

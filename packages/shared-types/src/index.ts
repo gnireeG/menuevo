@@ -14,3 +14,5 @@ export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 // Re-export des generierten Clients, sobald `generate:api-client` einmal gelaufen ist.
 // Bis dahin existiert der Ordner nicht -> Zeile einkommentieren nach erstem Codegen-Lauf.
 // export * from "./generated";
+
+export * from './generated/endpoints/restaurants/restaurants'

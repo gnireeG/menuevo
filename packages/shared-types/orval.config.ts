@@ -22,6 +22,9 @@ export default defineConfig({
           useQuery: true,
           useMutation: true,
         },
+        requestOptions: {
+          credentials: 'include'
+        }
       },
     },
   },
