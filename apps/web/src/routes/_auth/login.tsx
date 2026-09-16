@@ -5,14 +5,15 @@ import { authClient } from '#/auth/auth-client'
 import { useAppForm } from '#/hooks/use-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { authQueryKey } from '#/auth/query'
+import * as m from '#/paraglide/messages'
 
 export const Route = createFileRoute('/_auth/login')({
   component: RouteComponent,
 })
 
 const loginSchema = z.object({
-  email: z.email('Enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.email(m['auth.validation.email_invalid']()),
+  password: z.string().min(8, m['auth.validation.password_min']()),
 })
 
 function RouteComponent() {
@@ -52,8 +53,8 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-4 w-80">
       <div>
-        <h1 className="heading-1">Login</h1>
-        <p>Welcome back! Log in to access your code snippits.</p>
+        <h1 className="heading-1">{m['auth.login_title']()}</h1>
+        <p>{m['auth.login_description']()}</p>
       </div>
 
       <form
@@ -65,26 +66,36 @@ function RouteComponent() {
         }}
       >
         <form.AppField name="email">
-          {(field) => <field.TextField label="Email" type="email" autoComplete="email" />}
+          {(field) => (
+            <field.TextField
+              label={m['auth.form_labels.email']()}
+              type="email"
+              autoComplete="email"
+            />
+          )}
         </form.AppField>
 
         <form.AppField name="password">
           {(field) => (
-            <field.TextField label="Password" type="password" autoComplete="current-password" />
+            <field.TextField
+              label={m['auth.form_labels.password']()}
+              type="password"
+              autoComplete="current-password"
+            />
           )}
         </form.AppField>
 
         {formError && <span className="text-sm text-red-600">{formError}</span>}
 
         <form.AppForm>
-          <form.SubmitButton>Log in</form.SubmitButton>
+          <form.SubmitButton>{m['auth.login_submit']()}</form.SubmitButton>
         </form.AppForm>
       </form>
 
       <p className="text-sm">
-        Don't have an account?{' '}
+        {m['auth.login_no_account']()}{' '}
         <Link to="/register" className="text-primary underline">
-          Register
+          {m['auth.login_register_link']()}
         </Link>
       </p>
     </div>

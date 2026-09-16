@@ -26,3 +26,7 @@ body {
 button:not(:disabled){
   cursor: pointer;
 }
+
+@utility eyebrow{
+  @apply text-xs uppercase tracking-wider font-mono font-semibold;
+}

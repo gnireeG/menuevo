@@ -1,0 +1,37 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "example_message": "Hello world {username}",
+  "auth": {
+    "login_title": "Login",
+    "login_description": "Welcome back! Log in to access your code snippits.",
+    "login_submit": "Log in",
+    "login_no_account": "Don't have an account?",
+    "login_register_link": "Register",
+    "register_title": "Register",
+    "register_description": "Create your account to start storing your favorite code snippits!",
+    "register_submit": "Create account",
+    "register_has_account": "Already have an account?",
+    "register_login_link": "Log in",
+    "form_labels": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password"
+    },
+    "validation": {
+      "name_required": "Name is required",
+      "email_invalid": "Enter a valid email address",
+      "password_min": "Password must be at least 8 characters"
+    }
+  },
+  "admin": {
+    "nav": {
+      "settings": "Settings",
+      "general": "General",
+      "address": "Address",
+      "language_currency": "Language & Currency",
+      "wifi": "WiFi",
+      "team": "Team",
+      "subscription": "Subscription"
+    }
+  }
+}

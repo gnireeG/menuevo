@@ -1,6 +1,7 @@
 import { HeadContent, Scripts, createRootRoute, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { getLocale } from '../paraglide/runtime.js'
 
 import appCss from '../css/styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
@@ -13,7 +14,8 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ context }) => {
     const session = await context.queryClient.query(authQueryOptions())
-    return { session }
+    const user = session?.user ?? null
+    return { session, user }
   },
   head: () => ({
     meta: [
@@ -40,7 +42,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang={getLocale()}>
       <head>
         <HeadContent />
       </head>
