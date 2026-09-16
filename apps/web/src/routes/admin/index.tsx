@@ -1,4 +1,5 @@
 import { useAppForm } from '#/hooks/use-form'
+import { useRestaurant } from '#/hooks/use-restaurant'
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { getRestaurantsControllerFindAllQueryKey, useRestaurantsControllerCreate, useRestaurantsControllerFindAll } from 'shared-types'
@@ -22,9 +23,12 @@ function RouteComponent() {
     }
   })
 
+  const { data: activeRestaurant } = useRestaurant()
+
   return(
     <div>
       hallo welt.
+      <h1>current reaturant: {activeRestaurant?.data.name}</h1>
       <p>restuarants:</p>
       <ul>
         {data?.data.map(org => (

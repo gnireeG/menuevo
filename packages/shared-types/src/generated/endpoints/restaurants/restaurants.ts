@@ -511,4 +511,116 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
+    export type restaurantsControllerByOrganizationResponse200 = {
+  data: RestaurantResponseDto
+  status: 200
+}
     
+export type restaurantsControllerByOrganizationResponseSuccess = (restaurantsControllerByOrganizationResponse200) & {
+  headers: Headers;
+};
+;
+
+export type restaurantsControllerByOrganizationResponse = (restaurantsControllerByOrganizationResponseSuccess)
+
+export const getRestaurantsControllerByOrganizationUrl = (organizationId: string,) => {
+
+
+  
+
+  return `http://localhost:3001/api/restaurants/organization/${organizationId}`
+}
+
+export const restaurantsControllerByOrganization = async (organizationId: string, options?: RequestInit): Promise<restaurantsControllerByOrganizationResponse> => {
+  
+  const res = await fetch(getRestaurantsControllerByOrganizationUrl(organizationId),
+  {
+      credentials: 'include',
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: restaurantsControllerByOrganizationResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as restaurantsControllerByOrganizationResponse
+}
+
+
+
+
+
+export const getRestaurantsControllerByOrganizationQueryKey = (organizationId?: string,) => {
+    return [
+    `http://localhost:3001/api/restaurants/organization/${organizationId}`
+    ] as const;
+    }
+
+    
+export const getRestaurantsControllerByOrganizationQueryOptions = <TData = Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError = unknown>(organizationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData>>, fetch?: RequestInit}
+) => {
+
+const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getRestaurantsControllerByOrganizationQueryKey(organizationId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>> = ({ signal }) => restaurantsControllerByOrganization(organizationId, { signal, ...fetchOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(organizationId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type RestaurantsControllerByOrganizationQueryResult = NonNullable<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>>
+export type RestaurantsControllerByOrganizationQueryError = unknown
+
+
+export function useRestaurantsControllerByOrganization<TData = Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError = unknown>(
+ organizationId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof restaurantsControllerByOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof restaurantsControllerByOrganization>>
+        > , 'initialData'
+      >, fetch?: RequestInit}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRestaurantsControllerByOrganization<TData = Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError = unknown>(
+ organizationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof restaurantsControllerByOrganization>>,
+          TError,
+          Awaited<ReturnType<typeof restaurantsControllerByOrganization>>
+        > , 'initialData'
+      >, fetch?: RequestInit}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRestaurantsControllerByOrganization<TData = Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError = unknown>(
+ organizationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData>>, fetch?: RequestInit}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useRestaurantsControllerByOrganization<TData = Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError = unknown>(
+ organizationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof restaurantsControllerByOrganization>>, TError, TData>>, fetch?: RequestInit}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getRestaurantsControllerByOrganizationQueryOptions(organizationId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+

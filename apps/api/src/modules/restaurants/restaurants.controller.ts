@@ -29,6 +29,12 @@ export class RestaurantsController {
     return this.restaurantsService.findOne(id);
   }
 
+  @Get('organization/:organizationId')
+  @ApiOkResponse({ type: RestaurantResponseDto })
+  byOrganization(@Param('organizationId') organizationId: string){
+    return this.restaurantsService.findByOrganizationId(organizationId)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRestaurantDto: UpdateRestaurantDto) {
     return this.restaurantsService.update(id, updateRestaurantDto);

@@ -25,7 +25,7 @@ export function TextField({ label, type = 'text', placeholder, autoComplete }: T
         value={field.state.value}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
-        className="px-3 py-2 outline-none shadow-dark focus:shadow-dark-active focus:translate-1 transition-all border text-sm"
+        className="px-3 py-2 outline-none shadow-dark focus:shadow-dark-active focus:translate-0.5 transition-all border text-sm rounded-md"
       />
       {error && <span className="text-sm text-destructive mt-2 font-semibold">{error?.message ?? String(error)}</span>}
     </div>

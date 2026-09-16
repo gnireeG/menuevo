@@ -4,7 +4,7 @@ import { Button } from "#/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { authClient } from "#/auth/auth-client";
-import { CaretUpDownIcon } from "@phosphor-icons/react";
+import { CaretUpDownIcon, GearSixIcon, SignOutIcon } from "@phosphor-icons/react";
 import { Separator } from "#/components/ui/separator";
 import { authQueryKey } from "#/auth/query";
 
@@ -28,7 +28,7 @@ export default function UserMenu(){
         {user && (
             <DropdownMenu>
                 <DropdownMenuTrigger className="w-full" asChild>
-                    <Button className="w-full" shadow={false}>{user.name}<CaretUpDownIcon /></Button>
+                    <Button size="lg" className="w-full">{user.name}<CaretUpDownIcon /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] p-4">
                     <div>
@@ -37,8 +37,8 @@ export default function UserMenu(){
                     </div>
                     <Separator />
                     <DropdownMenuGroup className="space-y-2">
-                        <Button variant="ghost" className="w-full">Settings</Button>
-                        <Button variant="destructive" className="w-full" shadow={false} onClick={handleLogout} loading={logoutLoading}>Logout</Button>
+                        <Button variant="ghost" className="w-full"><GearSixIcon />Settings</Button>
+                        <Button variant="destructive" className="w-full" onClick={handleLogout} loading={logoutLoading}><SignOutIcon />Sign out</Button>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>

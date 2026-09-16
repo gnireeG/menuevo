@@ -83,6 +83,12 @@ export class RestaurantsService {
     })
   }
 
+  async findByOrganizationId(organizationId: string){
+    return await this.database.db.query.restaurants.findFirst({
+      where: eq(restaurants.organizationId, organizationId)
+    })
+  }
+
   update(id: string, updateRestaurantDto: UpdateRestaurantDto) {
     return `This action updates a #${id} restaurant`;
   }

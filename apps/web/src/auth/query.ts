@@ -1,8 +1,15 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getRequestHeaders } from "@tanstack/react-start/server";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { authClient } from "./auth-client";
 
 export const authQueryKey = ['auth']
+
+const getAuthHeaders = createIsomorphicFn()
+    .client(() => undefined)
+    .server(async () => {
+        const { getRequestHeaders } = await import("@tanstack/react-start/server");
+        return getRequestHeaders();
+    })
 
 export const authQueryOptions = () => {
     return queryOptions({
@@ -10,7 +17,7 @@ export const authQueryOptions = () => {
         queryFn: async () => {
             const { data: session } = await authClient.getSession({
                 fetchOptions: {
-                    headers: typeof window === 'undefined' ? getRequestHeaders() : undefined,
+                    headers: await getAuthHeaders(),
                 },
             })
             return session

@@ -64,7 +64,7 @@ function FlyoutContent({
       <DialogPrimitive.Content
         data-slot="flyout-content"
         className={cn(
-          "fixed z-50 flex flex-col gap-4 overflow-y-auto bg-white/60 backdrop-blur-xl p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-200 outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 rounded-2xl border-white border shadow-lg shadow-black/30",
+          "fixed z-50 flex flex-col gap-4 overflow-y-auto bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-200 outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 border border-border rounded-md shadow-dark",
           clsx({
             "inset-x-4 top-4 max-h-[80vh] w-[calc(100dvw-2rem)] data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top":
               side === "top",
