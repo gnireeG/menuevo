@@ -7,7 +7,7 @@ import { CreditCardIcon, GearIcon, MapPinAreaIcon, TranslateIcon, UsersIcon, Wif
 
 export default function Navbar(){
     return(
-        <nav className="bg-sidebar-accent p-4 flex flex-col justify-between w-64 shadow-dark rounded-r-md border border-border">
+        <nav className="bg-sidebar-accent p-4 flex flex-col justify-between w-64 shadow-dark rounded-r-md border border-border shrink-0">
             <div className="flex flex-col gap-4 items-start">
                 <img src="/logo-menuevo.svg" className="h-6" />
                 <OrganizationSelector />

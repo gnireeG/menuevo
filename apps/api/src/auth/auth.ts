@@ -7,6 +7,7 @@ import { i18n, locales } from "@better-auth/i18n"
 import { emailOTP } from "better-auth/plugins"
 import { Logger } from '@nestjs/common';
 import { NotificationsService } from '../notifications/notifications.service.js';
+import { passkey } from "@better-auth/passkey"
 
 const logger = new Logger('Auth');
 
@@ -36,6 +37,7 @@ export const createAuth = (notificationsService: NotificationsService) => better
         organization(),
         admin(),
         i18n({ translations: locales }),
+        passkey(),
         emailOTP({
             overrideDefaultEmailVerification: true,
             disableSignUp: true,

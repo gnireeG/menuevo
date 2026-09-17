@@ -1,5 +1,13 @@
 @custom-variant dark (&:is(.dark *));
 
+/* Radix data-state / data-orientation shorthands used by shadcn components */
+@custom-variant data-open (&[data-state="open"]);
+@custom-variant data-closed (&[data-state="closed"]);
+@custom-variant data-active (&[data-state="active"]);
+@custom-variant data-inactive (&[data-state="inactive"]);
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

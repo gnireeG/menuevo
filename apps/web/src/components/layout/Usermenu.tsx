@@ -11,6 +11,8 @@ import { authQueryKey } from "#/auth/query";
 export default function UserMenu(){
     const { user } = useRouteContext({from: '__root__'})
 
+    const [open, setOpen] = useState(false)
+
     const queryClient = useQueryClient()
     const router = useRouter()
 
@@ -31,7 +33,7 @@ export default function UserMenu(){
     }
 
     return(
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={(e) => setOpen(e)}>
             <DropdownMenuTrigger className="w-full" asChild>
                 <Button size="lg" className="w-full">{user.name}<CaretUpDownIcon /></Button>
             </DropdownMenuTrigger>
@@ -42,8 +44,8 @@ export default function UserMenu(){
                 </div>
                 <Separator />
                 <DropdownMenuGroup className="space-y-2">
-                    <Link to="/admin"><Button variant="ghost" className="w-full">Restaurants verwalten</Button></Link>
-                    <Button variant="ghost" className="w-full"><GearSixIcon />Settings</Button>
+                    <Link to="/admin" className="block" onClick={() => setOpen(false)}><Button variant="ghost" className="w-full">Restaurants verwalten</Button></Link>
+                    <Link to="/admin/profile/settings" className="block" onClick={() => setOpen(false)}><Button variant="ghost" className="w-full"><GearSixIcon />Settings</Button></Link> 
                     <Button variant="destructive" className="w-full" onClick={handleLogout} loading={logoutLoading}><SignOutIcon />Sign out</Button>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

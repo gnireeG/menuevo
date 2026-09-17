@@ -55,5 +55,30 @@
       "team": "Team",
       "subscription": "Abonnement"
     }
+  },
+  "profile": {
+    "settings": {
+      "general": "Allgemein",
+      "passkeys": "Passkeys",
+      "passkeys_title": "Passkeys",
+      "passkeys_description": "Melde dich ohne Passwort an – mit Fingerabdruck, Gesicht oder Geräte-PIN.",
+      "passkeys_add": "Passkey hinzufügen",
+      "passkeys_loading": "Passkeys werden geladen…",
+      "passkeys_load_error": "Passkeys konnten nicht geladen werden.",
+      "passkeys_empty": "Du hast noch keinen Passkey hinzugefügt.",
+      "passkeys_unknown_authenticator": "Unbekannter Authenticator",
+      "passkeys_synced": "Synchronisiert",
+      "passkeys_device_bound": "Nur auf diesem Gerät",
+      "passkeys_added": "Hinzugefügt am {date}",
+      "passkeys_delete": "Passkey entfernen"
+    }
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "confirm_text": "Möchtest du wirklich fortfahren?",
+    "delete": "Löschen",
+    "confirm_title_delete": "Löschen",
+    "confirm_text_delete": "Möchtest du das wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
   }
 }

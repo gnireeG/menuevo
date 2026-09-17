@@ -2,7 +2,7 @@ import { useFieldContext } from '#/hooks/use-form'
 import { cn } from 'cn'
 
 type TextFieldProps = {
-  label: string
+  label?: string
   type?: string
   placeholder?: string
   autoComplete?: string
@@ -15,9 +15,11 @@ export function TextField({ label, type = 'text', placeholder, autoComplete, rea
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={field.name} className="text-sm font-medium">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={field.name} className="text-sm font-medium">
+          {label}
+        </label>
+      )}
       <input
         id={field.name}
         name={field.name}

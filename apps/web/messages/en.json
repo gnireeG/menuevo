@@ -61,5 +61,30 @@
   },
   "general": {
     "create": "Create"
+  },
+  "profile": {
+    "settings": {
+      "general": "General",
+      "passkeys": "Passkeys",
+      "passkeys_title": "Passkeys",
+      "passkeys_description": "Sign in without a password using your fingerprint, face or device PIN.",
+      "passkeys_add": "Add passkey",
+      "passkeys_loading": "Loading passkeys…",
+      "passkeys_load_error": "Passkeys could not be loaded.",
+      "passkeys_empty": "You have not added a passkey yet.",
+      "passkeys_unknown_authenticator": "Unknown authenticator",
+      "passkeys_synced": "Synced",
+      "passkeys_device_bound": "This device only",
+      "passkeys_added": "Added on {date}",
+      "passkeys_delete": "Remove passkey"
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "confirm_text": "Are you sure you want to continue?",
+    "delete": "Delete",
+    "confirm_title_delete": "Delete",
+    "confirm_text_delete": "Are you sure you want to delete this? This action cannot be undone."
   }
 }

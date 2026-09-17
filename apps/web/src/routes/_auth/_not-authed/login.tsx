@@ -2,10 +2,14 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { z } from 'zod'
 import { authClient } from '#/auth/auth-client'
+import { signalUnknownCredential } from '#/auth/passkeys'
 import { useAppForm } from '#/hooks/use-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { authQueryKey } from '#/auth/query'
 import * as m from '#/paraglide/messages'
+import { Separator } from '#/components/ui/separator'
+import { Button } from '#/components/ui/button'
+import { GoogleLogoIcon, KeyIcon } from '@phosphor-icons/react'
 
 export const Route = createFileRoute('/_auth/_not-authed/login')({
   component: RouteComponent,
@@ -56,6 +60,34 @@ function RouteComponent() {
     },
   })
 
+  const handlePasskeyLogin = async () => {
+    setFormError(null)
+    // `returnWebAuthnResponse` hands us the credential the user picked, so a
+    // passkey the server no longer knows can be reported back to the provider.
+    const result = await authClient.signIn.passkey({ returnWebAuthnResponse: true })
+
+    if (!result?.error) {
+      await queryClient.invalidateQueries({ queryKey: authQueryKey })
+      navigate({ to: '/admin' })
+      return
+    }
+
+    // The passkey exists in the user's password manager but not in our
+    // database - it was deleted here, or belongs to another environment.
+    // Signal it so the provider drops the dead entry instead of offering it
+    // again on every login.
+    const { code } = result.error as { code?: string }
+    const credentialId = 'webauthn' in result ? result.webauthn?.response.id : undefined
+    if (credentialId && code === 'PASSKEY_NOT_FOUND') {
+      await signalUnknownCredential(credentialId)
+    }
+
+    // Dismissing the browser prompt is a normal way out, not an error.
+    if (code === 'AUTH_CANCELLED') return
+
+    setFormError(result.error.message ?? null)
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -97,6 +129,13 @@ function RouteComponent() {
           <form.SubmitButton>{m['auth.login_submit']()}</form.SubmitButton>
         </form.AppForm>
       </form>
+
+      <Separator />
+
+      <div className="flex gap-4 flex-wrap">
+        <Button className="grow" onClick={handlePasskeyLogin}><KeyIcon />Passkey</Button>
+        <Button className="grow"><GoogleLogoIcon />Google</Button>
+      </div>
 
       <p className="text-sm">
         <Link to="/reset-password" className="text-primary underline">
