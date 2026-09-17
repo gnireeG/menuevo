@@ -4,10 +4,9 @@ import { Button } from "#/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { authClient } from "#/auth/auth-client";
-import { CaretUpDownIcon, GearSixIcon, SignOutIcon } from "@phosphor-icons/react";
+import { CaretUpDownIcon, GearSixIcon, SignInIcon, SignOutIcon } from "@phosphor-icons/react";
 import { Separator } from "#/components/ui/separator";
 import { authQueryKey } from "#/auth/query";
-import { m } from "#/paraglide/messages";
 
 export default function UserMenu(){
     const { user } = useRouteContext({from: '__root__'})
@@ -27,7 +26,7 @@ export default function UserMenu(){
 
     if(!user){
         return(
-            <Link to="/login"><Button variant="primary">{m['auth.login_submit']()}</Button></Link>
+            <Link to="/login"><Button variant="primary"><SignInIcon /></Button></Link>
         )
     }
 

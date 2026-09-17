@@ -7,6 +7,7 @@ import { UpdateRestaurantDto } from './dto/update-restaurant.dto.js';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { DatabaseService } from '../../database/database.service.js';
 import { RestaurantResponseDto } from './dto/restaurant-response.dto.js';
+import { get } from 'node:http';
 
 @Controller('restaurants')
 export class RestaurantsController {
@@ -20,8 +21,8 @@ export class RestaurantsController {
 
   @Get()
   @ApiOkResponse({ type: RestaurantResponseDto, isArray: true })
-  findAll() {
-    return this.restaurantsService.findAll();
+  findAll(@Req() request: Request) {
+    return this.restaurantsService.findAll(request.headers);
   }
 
   @Get(':id')

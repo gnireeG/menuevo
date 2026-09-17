@@ -54,9 +54,11 @@ export default function OrganizationSelector(){
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] p-4 flex flex-col gap-2 mt-2">
-                {organizations?.map(org => (
-                    <Button variant="ghost" shadow={false} key={org.id} onClick={() => handleSetOrg(org.id)}>{org.name}</Button>
-                ))}
+                <div className=" max-h-48 overflow-y-auto flex flex-col gap-2">
+                    {organizations?.map(org => (
+                        <Button variant="ghost" shadow={false} key={org.id} onClick={() => handleSetOrg(org.id)}>{org.name}</Button>
+                    ))}
+                </div>
                 <CreateRestaurantModal />
             </DropdownMenuContent>
         </DropdownMenu>

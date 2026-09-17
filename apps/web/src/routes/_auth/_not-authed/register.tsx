@@ -49,7 +49,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex flex-col gap-4 w-80">
+    <div className="flex flex-col gap-4">
       <div>
         <h1 className="heading-1">{m['auth.register_title']()}</h1>
         <p>{m['auth.register_description']()}</p>

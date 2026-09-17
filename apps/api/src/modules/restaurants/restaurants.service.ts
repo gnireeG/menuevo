@@ -10,7 +10,7 @@ import type { AppAuth } from '../../auth/auth.js';
 import { APIError } from 'better-auth/api';
 import { fromNodeHeaders } from 'better-auth/node';
 import { slugify } from '../../lib/utils.js';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import type { IncomingHttpHeaders } from 'http';
 
 @Injectable()
@@ -68,9 +68,19 @@ export class RestaurantsService {
     }
   }
 
-  async findAll(): Promise<RestaurantResponseDto[]> {
-    const rows = await this.database.db.query.restaurants.findMany()
-    return rows
+  async findAll(headers: IncomingHttpHeaders): Promise<RestaurantResponseDto[]> {
+    const myOrgs = await this.auth.api.listOrganizations(
+      {headers: fromNodeHeaders(headers)}
+    )
+    const orgIds = myOrgs.map(org => org.id)
+
+    if (orgIds.length === 0) {
+      return []
+    }
+
+    return await this.database.db.query.restaurants.findMany({
+      where: inArray(restaurants.organizationId, orgIds)
+    })
   }
 
   async findOne(id: string) {
