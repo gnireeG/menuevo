@@ -33,6 +33,17 @@ export const createAuth = (notificationsService: NotificationsService) => better
     database: drizzleAdapter(db, {
         provider: 'pg'
     }),
+    user: {
+        additionalFields: {
+            activeOrganizationId: {
+                type: 'string',
+                required: false,
+                input: false,
+                fieldName: 'active_organization_id',
+                returned: false
+            }
+        }
+    },
     plugins: [
         organization(),
         admin(),
@@ -57,7 +68,63 @@ export const createAuth = (notificationsService: NotificationsService) => better
                 }
             }
         })
-    ]
+    ],
+    databaseHooks: {
+        session: {
+            create: {
+                // set last active organization on login
+                before: async(session, ctx) => {
+                    const adapter = ctx!.context.adapter;
+
+                    const user = await adapter.findOne<{ activeOrganizationId: string | null }>({
+                        model: "user",
+                        where: [{ field: "id", value: session.userId }],
+                    });
+
+                    let orgId = user?.activeOrganizationId ?? null
+
+                    if(orgId){
+                        const member = await adapter.findOne({
+                            model: 'member',
+                            where: [
+                                { field: 'userId', value: session.userId},
+                                { field: 'organizationId', value: orgId}
+                            ]
+                        })
+
+                        if(!member) orgId = null;
+                    }
+
+                    if (!orgId) {
+                        const member = await adapter.findOne<{ organizationId: string }>({
+                            model: "member",
+                            where: [{ field: "userId", value: session.userId }],
+                        });
+                        orgId = member?.organizationId ?? null;
+                    }
+
+                    return { data: { ...session, activeOrganizationId: orgId } };
+                }
+            },
+            update: {
+                before: async (data, ctx) => {
+                if (!("activeOrganizationId" in data)) return { data };
+
+                const userId =
+                    (data as any).userId ?? ctx?.context.session?.session.userId;
+                if (!userId) return { data };
+
+                await ctx!.context.adapter.update({
+                    model: "user",
+                    where: [{ field: "id", value: userId }],
+                    update: { activeOrganizationId: data.activeOrganizationId ?? null },
+                });
+
+                return { data };
+                },
+            }
+        }
+    }
 })
 
 export type AppAuth = ReturnType<typeof createAuth>;

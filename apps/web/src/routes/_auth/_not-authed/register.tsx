@@ -65,14 +65,14 @@ function RouteComponent() {
       >
         <form.AppField name="name">
           {(field) => (
-            <field.TextField label={m['auth.form_labels.name']()} autoComplete="name" />
+            <field.TextField label={m['form_labels.name']()} autoComplete="name" />
           )}
         </form.AppField>
 
         <form.AppField name="email">
           {(field) => (
             <field.TextField
-              label={m['auth.form_labels.email']()}
+              label={m['form_labels.email']()}
               type="email"
               autoComplete="email"
             />
@@ -82,7 +82,7 @@ function RouteComponent() {
         <form.AppField name="password">
           {(field) => (
             <field.TextField
-              label={m['auth.form_labels.password']()}
+              label={m['form_labels.password']()}
               type="password"
               autoComplete="new-password"
             />

@@ -42,7 +42,7 @@ export default function CreateRestaurantModal(){
     return(
         <Flyout open={open} onOpenChange={(e) => setOpen(e)}>
             <FlyoutTrigger asChild>
-                <Button className="w-full"><PlusIcon />{m['admin.restaurant.new_restaurant']()}</Button>
+                <Button className="w-full" variant="primary"><PlusIcon />{m['admin.restaurant.new_restaurant']()}</Button>
             </FlyoutTrigger>
             <FlyoutContent>
                 <FlyoutHeader>
