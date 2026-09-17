@@ -1,10 +1,11 @@
-import { authClient } from "#/auth/auth-client"
+import { useAuth } from "#/auth/query"
 import { useRestaurantsControllerByOrganization } from "shared-types"
 
 export const useRestaurant = () => {
-    const { data: activeOrg } = authClient.useActiveOrganization()
+    const { data: session } = useAuth()
+    const activeOrgId = session?.session.activeOrganizationId
 
-    return useRestaurantsControllerByOrganization(activeOrg?.id ?? "", {
-        query: { enabled: !!activeOrg?.id },
+    return useRestaurantsControllerByOrganization(activeOrgId ?? "", {
+        query: { enabled: !!activeOrgId },
     })
 }

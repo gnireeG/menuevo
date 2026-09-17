@@ -19,9 +19,10 @@ export default function UserMenu(){
 
     async function handleLogout() {
         setLogoutLoading(true)
-        await queryClient.setQueryData(authQueryKey, null)
         await authClient.signOut();
-        router.navigate({ to: "/" });
+        queryClient.setQueryData(authQueryKey, null)
+        await router.navigate({ to: "/" })
+        await router.invalidate()
     }
 
     if(!user){

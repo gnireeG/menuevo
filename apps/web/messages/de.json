@@ -1,4 +1,59 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Guten Tag {username}"
+  "example_message": "Guten Tag {username}",
+  "auth": {
+    "login_title": "Anmelden",
+    "login_description": "Willkommen zurück! Melde dich an, um auf deinen Bereich zuzugreifen.",
+    "login_submit": "Anmelden",
+    "login_no_account": "Noch kein Konto?",
+    "login_register_link": "Registrieren",
+    "login_forgot_password": "Passwort vergessen?",
+    "register_title": "Registrieren",
+    "register_description": "Erstelle dein Konto, um loszulegen!",
+    "register_submit": "Konto erstellen",
+    "register_has_account": "Du hast bereits ein Konto?",
+    "register_login_link": "Anmelden",
+    "verify_email_title": "E-Mail bestätigen",
+    "verify_email_description": "Wir haben dir einen 6-stelligen Code an deine E-Mail-Adresse geschickt. Gib ihn unten ein, um dein Konto zu aktivieren.",
+    "verify_email_submit": "E-Mail bestätigen",
+    "verify_email_resend": "Code erneut senden",
+    "verify_email_resend_cooldown": "Neuer Code in {seconds}s",
+    "verify_email_resent": "Wir haben dir einen neuen Code geschickt.",
+    "verify_email_failed": "Verifizierung fehlgeschlagen. Bitte prüfe den Code.",
+    "reset_password_title": "Passwort zurücksetzen",
+    "reset_password_request_description": "Gib deine E-Mail-Adresse ein, wir senden dir einen Code für ein neues Passwort.",
+    "reset_password_request_submit": "Code senden",
+    "reset_password_reset_description": "Gib den Code aus der E-Mail ein und wähle ein neues Passwort.",
+    "reset_password_reset_submit": "Neues Passwort speichern",
+    "reset_password_otp_sent": "Falls ein Konto zu dieser Adresse existiert, haben wir einen Code gesendet.",
+    "reset_password_wrong_email": "Falsche E-Mail-Adresse?",
+    "reset_password_back_to_login": "Zurück zur Anmeldung",
+    "reset_password_failed": "Passwort konnte nicht geändert werden. Bitte prüfe den Code.",
+    "form_labels": {
+      "name": "Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "otp": "Code",
+      "new_password": "Neues Passwort",
+      "confirm_password": "Passwort bestätigen"
+    },
+    "validation": {
+      "name_required": "Name ist erforderlich",
+      "email_invalid": "Gib eine gültige E-Mail-Adresse ein",
+      "password_min": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "otp_length": "Gib den 6-stelligen Code ein",
+      "password_mismatch": "Die Passwörter stimmen nicht überein"
+    }
+  },
+  "admin": {
+    "nav": {
+      "settings": "Einstellungen",
+      "general": "Allgemein",
+      "address": "Adresse",
+      "language_currency": "Sprache & Währung",
+      "wifi": "WLAN",
+      "team": "Team",
+      "subscription": "Abonnement"
+    }
+  }
 }

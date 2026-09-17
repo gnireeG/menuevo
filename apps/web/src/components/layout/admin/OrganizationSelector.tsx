@@ -1,33 +1,43 @@
 import { authClient } from "#/auth/auth-client"
+import { authQueryKey, useAuth } from "#/auth/query"
 import CreateRestaurantModal from "#/components/restaurant/CreateRestaurantModal"
 import { Button } from "#/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "#/components/ui/dropdown-menu"
 import { BuildingsIcon, CaretUpDownIcon } from "@phosphor-icons/react"
-import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
 
 export default function OrganizationSelector(){
 
     const { data: organizations, isPending: listPending } = authClient.useListOrganizations()
-    const { data: activeOrganization, isPending: activePending } = authClient.useActiveOrganization()
+    const { data: session } = useAuth()
+
+    const queryClient = useQueryClient()
+    const router = useRouter()
 
     const [open, setOpen] = useState(false)
+
+    const activeOrganization = organizations?.find(org => org.id === session?.session.activeOrganizationId)
 
     const handleSetOrg = async (id: string) => {
         await authClient.organization.setActive({
             organizationId: id
         })
+        await queryClient.invalidateQueries({ queryKey: authQueryKey })
+        await router.invalidate()
         setOpen(false)
     }
 
-    if(listPending || activePending) return null
+    useEffect(() => {
+        if(organizations?.length === 1 && !activeOrganization){
+            handleSetOrg(organizations[0].id)
+        }
+    }, [organizations, activeOrganization])
+
+    if(listPending) return null
 
     if(!organizations || organizations.length === 0) return <CreateRestaurantModal />
-
-    if(organizations.length === 1 && !activeOrganization){
-        authClient.organization.setActive({
-            organizationId: organizations[0].id
-        })
-    }
 
     return(
         <DropdownMenu open={open} onOpenChange={(e) => setOpen(e)}>

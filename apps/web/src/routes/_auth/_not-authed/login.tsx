@@ -3,14 +3,15 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { authClient } from '#/auth/auth-client'
 import { useAppForm } from '#/hooks/use-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { authQueryKey } from '#/auth/query'
 import * as m from '#/paraglide/messages'
 
-export const Route = createFileRoute('/_auth/register')({
+export const Route = createFileRoute('/_auth/_not-authed/login')({
   component: RouteComponent,
 })
 
-const registerSchema = z.object({
-  name: z.string().min(1, m['auth.validation.name_required']()),
+const loginSchema = z.object({
   email: z.email(m['auth.validation.email_invalid']()),
   password: z.string().min(8, m['auth.validation.password_min']()),
 })
@@ -19,28 +20,35 @@ function RouteComponent() {
   const navigate = useNavigate()
   const [formError, setFormError] = useState<string | null>(null)
 
+  const queryClient = useQueryClient()
+
   const form = useAppForm({
     defaultValues: {
-      name: '',
       email: '',
       password: '',
     },
     validators: {
-      onSubmit: registerSchema,
+      onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
       setFormError(null)
-      await authClient.signUp.email(
+      await authClient.signIn.email(
         {
-          name: value.name,
           email: value.email,
           password: value.password,
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: authQueryKey })
             navigate({ to: '/admin' })
           },
           onError: ({ error }) => {
+            // Signing in with an unverified address is not an error the user
+            // can fix here - send them to the OTP form instead.
+            if (error.code === 'EMAIL_NOT_VERIFIED') {
+              navigate({ to: '/verify-email', search: { email: value.email } })
+              return
+            }
             setFormError(error.message)
           },
         },
@@ -49,10 +57,10 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex flex-col gap-4 w-80">
+    <div className="flex flex-col gap-4">
       <div>
-        <h1 className="heading-1">{m['auth.register_title']()}</h1>
-        <p>{m['auth.register_description']()}</p>
+        <h1 className="heading-1">{m['auth.login_title']()}</h1>
+        <p>{m['auth.login_description']()}</p>
       </div>
 
       <form
@@ -63,12 +71,6 @@ function RouteComponent() {
           form.handleSubmit()
         }}
       >
-        <form.AppField name="name">
-          {(field) => (
-            <field.TextField label={m['auth.form_labels.name']()} autoComplete="name" />
-          )}
-        </form.AppField>
-
         <form.AppField name="email">
           {(field) => (
             <field.TextField
@@ -84,7 +86,7 @@ function RouteComponent() {
             <field.TextField
               label={m['auth.form_labels.password']()}
               type="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
             />
           )}
         </form.AppField>
@@ -92,14 +94,20 @@ function RouteComponent() {
         {formError && <span className="text-sm text-red-600">{formError}</span>}
 
         <form.AppForm>
-          <form.SubmitButton>{m['auth.register_submit']()}</form.SubmitButton>
+          <form.SubmitButton>{m['auth.login_submit']()}</form.SubmitButton>
         </form.AppForm>
       </form>
 
       <p className="text-sm">
-        {m['auth.register_has_account']()}{' '}
-        <Link to="/login" className="text-primary underline">
-          {m['auth.register_login_link']()}
+        <Link to="/reset-password" className="text-primary underline">
+          {m['auth.login_forgot_password']()}
+        </Link>
+      </p>
+
+      <p className="text-sm">
+        {m['auth.login_no_account']()}{' '}
+        <Link to="/register" className="text-primary underline">
+          {m['auth.login_register_link']()}
         </Link>
       </p>
     </div>

@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cn": "^0.3.0",
+    "input-otp": "^1.5.0",
     "radix-ui": "^1.6.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -38,6 +39,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@inlang/paraglide-js": "^2.25.2",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/eslint-config": "latest",
     "@tanstack/router-cli": "^1.132.0",
@@ -48,8 +50,7 @@
     "eslint": "^9.20.0",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.0",
-    "@inlang/paraglide-js": "^2.25.2"
+    "vite": "^8.0.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -1,13 +1,15 @@
 import { useFieldContext } from '#/hooks/use-form'
+import { cn } from 'cn'
 
 type TextFieldProps = {
   label: string
   type?: string
   placeholder?: string
   autoComplete?: string
+  readOnly?: boolean
 }
 
-export function TextField({ label, type = 'text', placeholder, autoComplete }: TextFieldProps) {
+export function TextField({ label, type = 'text', placeholder, autoComplete, readOnly }: TextFieldProps) {
   const field = useFieldContext<string>()
   const error = field.state.meta.isTouched ? field.state.meta.errors[0] : undefined
 
@@ -22,10 +24,14 @@ export function TextField({ label, type = 'text', placeholder, autoComplete }: T
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        readOnly={readOnly}
         value={field.state.value}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
-        className="px-3 py-2 outline-none shadow-dark focus:shadow-dark-active focus:translate-0.5 transition-all border text-sm rounded-md"
+        className={cn(
+          'px-3 py-2 outline-none shadow-dark focus:shadow-dark-active focus:translate-0.5 transition-all border text-sm rounded-md',
+          readOnly && 'bg-muted text-muted-foreground cursor-not-allowed focus:shadow-dark focus:translate-0',
+        )}
       />
       {error && <span className="text-sm text-destructive mt-2 font-semibold">{error?.message ?? String(error)}</span>}
     </div>

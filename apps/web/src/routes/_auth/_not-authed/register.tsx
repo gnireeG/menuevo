@@ -3,15 +3,14 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { authClient } from '#/auth/auth-client'
 import { useAppForm } from '#/hooks/use-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { authQueryKey } from '#/auth/query'
 import * as m from '#/paraglide/messages'
 
-export const Route = createFileRoute('/_auth/login')({
+export const Route = createFileRoute('/_auth/_not-authed/register')({
   component: RouteComponent,
 })
 
-const loginSchema = z.object({
+const registerSchema = z.object({
+  name: z.string().min(1, m['auth.validation.name_required']()),
   email: z.email(m['auth.validation.email_invalid']()),
   password: z.string().min(8, m['auth.validation.password_min']()),
 })
@@ -20,27 +19,26 @@ function RouteComponent() {
   const navigate = useNavigate()
   const [formError, setFormError] = useState<string | null>(null)
 
-  const queryClient = useQueryClient()
-
   const form = useAppForm({
     defaultValues: {
+      name: '',
       email: '',
       password: '',
     },
     validators: {
-      onSubmit: loginSchema,
+      onSubmit: registerSchema,
     },
     onSubmit: async ({ value }) => {
       setFormError(null)
-      await authClient.signIn.email(
+      await authClient.signUp.email(
         {
+          name: value.name,
           email: value.email,
           password: value.password,
         },
         {
-          onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: authQueryKey })
-            navigate({ to: '/admin' })
+          onSuccess: () => {
+            navigate({ to: '/verify-email', search: { email: value.email } })
           },
           onError: ({ error }) => {
             setFormError(error.message)
@@ -53,8 +51,8 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-4 w-80">
       <div>
-        <h1 className="heading-1">{m['auth.login_title']()}</h1>
-        <p>{m['auth.login_description']()}</p>
+        <h1 className="heading-1">{m['auth.register_title']()}</h1>
+        <p>{m['auth.register_description']()}</p>
       </div>
 
       <form
@@ -65,6 +63,12 @@ function RouteComponent() {
           form.handleSubmit()
         }}
       >
+        <form.AppField name="name">
+          {(field) => (
+            <field.TextField label={m['auth.form_labels.name']()} autoComplete="name" />
+          )}
+        </form.AppField>
+
         <form.AppField name="email">
           {(field) => (
             <field.TextField
@@ -80,7 +84,7 @@ function RouteComponent() {
             <field.TextField
               label={m['auth.form_labels.password']()}
               type="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
             />
           )}
         </form.AppField>
@@ -88,14 +92,14 @@ function RouteComponent() {
         {formError && <span className="text-sm text-red-600">{formError}</span>}
 
         <form.AppForm>
-          <form.SubmitButton>{m['auth.login_submit']()}</form.SubmitButton>
+          <form.SubmitButton>{m['auth.register_submit']()}</form.SubmitButton>
         </form.AppForm>
       </form>
 
       <p className="text-sm">
-        {m['auth.login_no_account']()}{' '}
-        <Link to="/register" className="text-primary underline">
-          {m['auth.login_register_link']()}
+        {m['auth.register_has_account']()}{' '}
+        <Link to="/login" className="text-primary underline">
+          {m['auth.register_login_link']()}
         </Link>
       </p>
     </div>

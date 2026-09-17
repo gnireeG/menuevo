@@ -2,13 +2,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import './globals.css';
+@import './fonts.css';
 
 * {
   box-sizing: border-box;
 }
 
 @theme{
-  
+  --font-heading: 'Francois One', sans-serif;
   --shadow-dark: 4px 4px 0px 0px var(--color-shadow);
   --shadow-dark-active: 2px 2px 0px 0px var(--color-shadow);
 }
@@ -29,4 +30,24 @@ button:not(:disabled){
 
 @utility eyebrow{
   @apply text-xs uppercase tracking-wider font-mono font-semibold;
+}
+
+.heading-1, .heading-2, .heading-3, .heading-4{
+  font-family: var(--font-heading);
+}
+
+.heading-1{
+  font-size: 2rem;
+}
+
+.heading-2{
+  font-size: 1.75rem;
+}
+
+.heading-3{
+  font-size: 1.5rem;
+}
+
+.heading-4{
+  font-size: 1.25rem;
 }

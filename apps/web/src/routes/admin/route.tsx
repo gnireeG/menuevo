@@ -6,6 +6,9 @@ export const Route = createFileRoute('/admin')({
     if(!context.session){
       throw redirect({to: '/login'})
     }
+    if(!context.session.user.emailVerified){
+      throw redirect({to: '/verify-email', search: { email: context.session.user.email }})
+    }
     const user = context.session.user
     return { user }
   },

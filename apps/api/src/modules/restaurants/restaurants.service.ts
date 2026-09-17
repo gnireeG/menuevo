@@ -5,7 +5,8 @@ import { RestaurantResponseDto } from './dto/restaurant-response.dto.js';
 import { DatabaseService } from '../../database/database.service.js';
 import { restaurants } from '../../database/schema/restaurant.schema.js';
 import { organization } from '../../database/schema/auth.schema.js';
-import { auth } from '../../auth/auth.js';
+import { AuthService } from '@thallesp/nestjs-better-auth';
+import type { AppAuth } from '../../auth/auth.js';
 import { APIError } from 'better-auth/api';
 import { fromNodeHeaders } from 'better-auth/node';
 import { slugify } from '../../lib/utils.js';
@@ -15,9 +16,10 @@ import type { IncomingHttpHeaders } from 'http';
 @Injectable()
 export class RestaurantsService {
 
-  private auth = auth
-
-  constructor(private readonly database: DatabaseService){}
+  constructor(
+    private readonly database: DatabaseService,
+    private readonly auth: AuthService<AppAuth>,
+  ){}
 
   async create(createRestaurantDto: CreateRestaurantDto, userId: string, headers: IncomingHttpHeaders) {
 
@@ -54,7 +56,7 @@ export class RestaurantsService {
 
     try {
       const newRestaurant =  await this.database.db.insert(restaurants).values({...createRestaurantDto, organizationId: org.id, owner_id: userId}).returning()
-      await auth.api.setActiveOrganization({
+      await this.auth.api.setActiveOrganization({
         body: {
           organizationId: org.id,
         },

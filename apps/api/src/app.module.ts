@@ -4,8 +4,10 @@ import { HealthModule } from './modules/health/health.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { DatabaseModule } from './database/database.module.js';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
-import { auth } from './auth/auth.js'
+import { createAuth } from './auth/auth.js'
 import { RestaurantsModule } from './modules/restaurants/restaurants.module.js';
+import { NotificationsModule } from './notifications/notifications.module.js';
+import { NotificationsService } from './notifications/notifications.service.js';
 
 @Module({
   imports: [
@@ -13,12 +15,18 @@ import { RestaurantsModule } from './modules/restaurants/restaurants.module.js';
       isGlobal: true,
       envFilePath: ['../../.env', '.env'],
     }),
-    AuthModule.forRoot({auth}),
+    AuthModule.forRootAsync({
+      imports: [NotificationsModule],
+      inject: [NotificationsService],
+      useFactory: (notificationsService: NotificationsService) => ({
+        auth: createAuth(notificationsService),
+      }),
+    }),
     HealthModule,
     UsersModule,
     DatabaseModule,
     RestaurantsModule,
-    // Als Nächstes: MenuModule, TranslationModule (BullMQ-Queue), PdfModule, PosModule
+    NotificationsModule,
   ],
 })
 export class AppModule {}

@@ -1,20 +1,19 @@
+import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { ArrowLeftIcon } from '@phosphor-icons/react'
+import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: async ({context}) => {
-    if(context.session){
-      throw redirect({to: '/admin'})
-    }
-  },
+  
   component: RouteComponent,
 })
 
 function RouteComponent() {
   return(
     <div className="h-dvh w-full grid place-items-center">
-      <Card>
-        <CardContent>
+      <Card className="w-full max-w-md">
+        <CardContent className="w-full relative">
+          <Link to="/" className="absolute top-0 right-4"><Button variant="ghost"><ArrowLeftIcon /> Back</Button></Link>
           <Outlet />
         </CardContent>
       </Card>
