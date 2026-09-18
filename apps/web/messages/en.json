@@ -89,7 +89,16 @@
       "resend_invite": "Resend",
       "revoke_invite": "Revoke",
       "revoke_invite_confirm": "Revoke the invitation for {email}? The link in the invitation mail stops working immediately.",
-      "no_pending_invitations": "No pending invitations."
+      "no_pending_invitations": "No pending invitations.",
+      "remove_member_confirm": "Remove {name} from the team? They lose access to this restaurant immediately.",
+      "member_removed": "{name} was removed from the team.",
+      "member_remove_failed": "{name} could not be removed. Please try again.",
+      "invite_sent": "Invitation sent to {email}.",
+      "invite_send_failed": "The invitation to {email} could not be sent. Please try again.",
+      "invite_resent": "Invitation to {email} sent again.",
+      "invite_resend_failed": "The invitation to {email} could not be sent again. Please try again.",
+      "invite_revoked": "The invitation for {email} was revoked.",
+      "invite_revoke_failed": "The invitation for {email} could not be revoked. Please try again."
     }
   },
   "general": {

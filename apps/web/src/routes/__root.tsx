@@ -6,6 +6,7 @@ import { getLocale } from '../paraglide/runtime.js'
 import appCss from '../css/styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { authQueryOptions } from '#/auth/query'
+import { Toaster } from '#/components/ui/sonner'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -59,6 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             },
           ]}
         /> */}
+        <Toaster />
         <Scripts />
       </body>
     </html>

@@ -1,4 +1,4 @@
-import { activeMemberRoleOptions, invitationsOptions, teamMembersOptions, useCancelInvitation, useInviteTeamMember, useResendInvitation } from '#/auth/query'
+import { activeMemberRoleOptions, invitationsOptions, teamMembersOptions, useAuth, useCancelInvitation, useInviteTeamMember, useRemoveTeamMember, useResendInvitation } from '#/auth/query'
 import type { Invitation, TeamMember } from '#/auth/query'
 import Breadcrumbs from '#/components/admin/Breadcrumbs'
 import PersonRow from '#/components/admin/team/PersonRow'
@@ -12,6 +12,7 @@ import { m } from '#/paraglide/messages'
 import { PaperPlaneTiltIcon, TrashIcon } from '@phosphor-icons/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import z from 'zod'
 
 export const Route = createFileRoute('/admin/settings/team')({
@@ -43,8 +44,15 @@ function RouteComponent() {
       email: ''
     },
     onSubmit: async({value, formApi}) => {
-      await mutateAsync(value.email)
-      formApi.reset()
+      // The mutation rejects when the invite fails and the form would swallow
+      // that silently - the toast is the only feedback this form gives.
+      try {
+        await mutateAsync(value.email)
+        toast.success(m['admin.team.invite_sent']({ email: value.email }))
+        formApi.reset()
+      } catch {
+        toast.error(m['admin.team.invite_send_failed']({ email: value.email }))
+      }
     },
     validators: {
       onSubmit: z.object({
@@ -113,6 +121,16 @@ function RouteComponent() {
 function TeamMember({member} : {member: TeamMember}){
 
   const canManage = useCanManageTeam()
+  const { data: session } = useAuth()
+  const remove = useRemoveTeamMember()
+
+  // A name is not guaranteed on the user, so the email carries the copy when
+  // there is none - "Remove  from the team?" would be the alternative.
+  const label = member.user.name || member.user.email
+
+  // The endpoint would let an admin remove their own membership, dropping them
+  // out of the organization with no way back in. Leaving is a separate action.
+  const isSelf = session?.user.id === member.userId
 
   return(
     <PersonRow
@@ -120,8 +138,22 @@ function TeamMember({member} : {member: TeamMember}){
       title={member.user.name}
       subtitle={member.user.email}
       badge={<Badge variant={member.role === 'member' ? 'outline' : 'default'}>{member.role}</Badge>}
-      actions={canManage && (
-        <ConfirmButton disabled={member.role === 'owner'} variant="destructive" confirmType='delete' size="sm" shadow={false}><TrashIcon />{m['general.remove']()}</ConfirmButton>
+      actions={canManage && !isSelf && (
+        <ConfirmButton
+          disabled={member.role === 'owner'}
+          variant="destructive"
+          confirmType='delete'
+          size="sm"
+          shadow={false}
+          confirmText={m['admin.team.remove_member_confirm']({ name: label })}
+          loading={remove.isPending}
+          onClick={() => remove.mutate(member.id, {
+            onSuccess: () => toast.success(m['admin.team.member_removed']({ name: label })),
+            onError: () => toast.error(m['admin.team.member_remove_failed']({ name: label }))
+          })}
+        >
+          <TrashIcon />{m['general.remove']()}
+        </ConfirmButton>
       )}
     />
   )
@@ -146,7 +178,10 @@ function PendingInvitation({invitation} : {invitation: Invitation}){
             size="sm"
             shadow={false}
             loading={resend.isPending}
-            onClick={() => resend.mutate(invitation)}
+            onClick={() => resend.mutate(invitation, {
+              onSuccess: () => toast.success(m['admin.team.invite_resent']({ email: invitation.email })),
+              onError: () => toast.error(m['admin.team.invite_resend_failed']({ email: invitation.email }))
+            })}
           >
             <PaperPlaneTiltIcon />{m['admin.team.resend_invite']()}
           </Button>
@@ -157,7 +192,10 @@ function PendingInvitation({invitation} : {invitation: Invitation}){
             shadow={false}
             confirmText={m['admin.team.revoke_invite_confirm']({ email: invitation.email })}
             loading={cancel.isPending}
-            onClick={() => cancel.mutate(invitation.id)}
+            onClick={() => cancel.mutate(invitation.id, {
+              onSuccess: () => toast.success(m['admin.team.invite_revoked']({ email: invitation.email })),
+              onError: () => toast.error(m['admin.team.invite_revoke_failed']({ email: invitation.email }))
+            })}
           >
             <TrashIcon />{m['admin.team.revoke_invite']()}
           </ConfirmButton>

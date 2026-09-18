@@ -125,6 +125,22 @@ export const useResendInvitation = () => {
     })
 }
 
+/**
+ * Removes a member from the active organization. Better Auth refuses to remove
+ * the last owner and rejects callers without the `member: delete` permission,
+ * so the error is passed on instead of being assumed away.
+ */
+export const useRemoveTeamMember = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (memberId: string) => {
+            const { error } = await authClient.organization.removeMember({ memberIdOrEmail: memberId })
+            if (error) throw new Error(error.message ?? 'Could not remove the member')
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: teamMembersQueryKey })
+    })
+}
+
 export const useCancelInvitation = () => {
     const queryClient = useQueryClient()
     return useMutation({

@@ -104,7 +104,16 @@
       "resend_invite": "Erneut senden",
       "revoke_invite": "Zurückziehen",
       "revoke_invite_confirm": "Einladung für {email} zurückziehen? Der Link in der Einladungsmail funktioniert sofort nicht mehr.",
-      "no_pending_invitations": "Keine offenen Einladungen."
+      "no_pending_invitations": "Keine offenen Einladungen.",
+      "remove_member_confirm": "{name} aus dem Team entfernen? Der Zugriff auf dieses Restaurant endet sofort.",
+      "member_removed": "{name} wurde aus dem Team entfernt.",
+      "member_remove_failed": "{name} konnte nicht entfernt werden. Bitte versuche es erneut.",
+      "invite_sent": "Einladung an {email} gesendet.",
+      "invite_send_failed": "Die Einladung an {email} konnte nicht gesendet werden. Bitte versuche es erneut.",
+      "invite_resent": "Einladung an {email} erneut gesendet.",
+      "invite_resend_failed": "Die Einladung an {email} konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
+      "invite_revoked": "Die Einladung für {email} wurde zurückgezogen.",
+      "invite_revoke_failed": "Die Einladung für {email} konnte nicht zurückgezogen werden. Bitte versuche es erneut."
     }
   },
   "general": {
