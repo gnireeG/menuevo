@@ -8,6 +8,7 @@ import { emailOTP } from "better-auth/plugins"
 import { Logger } from '@nestjs/common';
 import { NotificationsService } from '../notifications/notifications.service.js';
 import { passkey } from "@better-auth/passkey"
+import { createAuthMiddleware } from "better-auth/api"
 
 const logger = new Logger('Auth');
 
@@ -45,7 +46,22 @@ export const createAuth = (notificationsService: NotificationsService) => better
         }
     },
     plugins: [
-        organization(),
+        organization({
+            async sendInvitationEmail(data, request) {
+                // Without the origin the link in the mail would point at
+                // "undefined/accept-invitation?id=..." - an invitation nobody can
+                // act on. Sending nothing is the honest outcome, so the invitation
+                // can be resent once the environment is configured.
+                const webOrigin = process.env.WEB_ORIGIN
+                if (!webOrigin) {
+                    logger.error('WEB_ORIGIN is not set - no invitation mail was sent')
+                    return
+                }
+
+                const inviteLink = webOrigin + '/accept-invitation?id=' + data.id;
+                await notificationsService.sendOrganizationInviteMail({url: inviteLink, email: data.email, inviterName: data.inviter.user.name})
+            },
+        }),
         admin(),
         i18n({ translations: locales }),
         passkey(),
@@ -69,6 +85,33 @@ export const createAuth = (notificationsService: NotificationsService) => better
             }
         })
     ],
+    hooks: {
+        // `get-invitation` only returns the inviter's *email*. The accept page
+        // wants to greet people with a name, so the inviter is looked up once
+        // and merged into the response. Every auth check the endpoint does
+        // (session, recipient match, expiry) has already passed at this point.
+        after: createAuthMiddleware(async (ctx) => {
+            if (ctx.path !== '/organization/get-invitation') return
+
+            const invitation = ctx.context.returned
+            if (!invitation || typeof invitation !== 'object' || !('inviterId' in invitation)) return
+
+            // Decoration only: the invitation itself is already complete, so a
+            // failing lookup must not turn a valid answer into a 500. The page
+            // falls back to the inviter's email when the name is missing.
+            const inviter = await ctx.context.adapter
+                .findOne<{ name: string }>({
+                    model: 'user',
+                    where: [{ field: 'id', value: (invitation as { inviterId: string }).inviterId }],
+                })
+                .catch((error: unknown) => {
+                    logger.warn(`Could not load the inviter for invitation lookup: ${error}`)
+                    return null
+                })
+
+            return ctx.json({ ...invitation, inviterName: inviter?.name ?? null })
+        })
+    },
     databaseHooks: {
         session: {
             create: {

@@ -23,8 +23,7 @@ export class NotificationsService {
             template: 'email-confirmation',
             context: {
                 ...this.layoutContext(),
-                email: options.email,
-                otp: options.otp
+                ...options
             }
         })
     }
@@ -36,8 +35,19 @@ export class NotificationsService {
             template: 'password-reset',
             context: {
                 ...this.layoutContext(),
-                email: options.email,
-                otp: options.otp
+                ...options
+            }
+        })
+    }
+
+    async sendOrganizationInviteMail(options: {url: string, email: string, inviterName: string}){
+        await this.mailserService.sendMail({
+            to: options.email,
+            subject: 'Restaurant invitation - MenuEvo',
+            template: 'restaurant-invitation',
+            context: {
+                ...this.layoutContext(),
+                ...options
             }
         })
     }

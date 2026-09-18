@@ -5,13 +5,23 @@ import { authClient } from '#/auth/auth-client'
 import { signalUnknownCredential } from '#/auth/passkeys'
 import { useAppForm } from '#/hooks/use-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { authQueryKey } from '#/auth/query'
+import { refreshSession } from '#/auth/query'
 import * as m from '#/paraglide/messages'
 import { Separator } from '#/components/ui/separator'
 import { Button } from '#/components/ui/button'
 import { GoogleLogoIcon, KeyIcon } from '@phosphor-icons/react'
 
+const loginSearchSchema = z.object({
+  /**
+   * Id of an invitation the visitor came from. Carrying only the id - instead
+   * of a redirect URL - keeps the destination fixed, so the parameter cannot
+   * be used to bounce anyone off to a foreign address after signing in.
+   */
+  invitation: z.string().optional(),
+})
+
 export const Route = createFileRoute('/_auth/_not-authed/login')({
+  validateSearch: loginSearchSchema,
   component: RouteComponent,
 })
 
@@ -22,9 +32,16 @@ const loginSchema = z.object({
 
 function RouteComponent() {
   const navigate = useNavigate()
+  const { invitation } = Route.useSearch()
   const [formError, setFormError] = useState<string | null>(null)
 
   const queryClient = useQueryClient()
+
+  /** Back to the invitation the visitor came from, otherwise into the admin area. */
+  const goToDestination = () =>
+    invitation
+      ? navigate({ to: '/accept-invitation', search: { id: invitation } })
+      : navigate({ to: '/admin' })
 
   const form = useAppForm({
     defaultValues: {
@@ -43,14 +60,14 @@ function RouteComponent() {
         },
         {
           onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: authQueryKey })
-            navigate({ to: '/admin' })
+            await refreshSession(queryClient)
+            goToDestination()
           },
           onError: ({ error }) => {
             // Signing in with an unverified address is not an error the user
             // can fix here - send them to the OTP form instead.
             if (error.code === 'EMAIL_NOT_VERIFIED') {
-              navigate({ to: '/verify-email', search: { email: value.email } })
+              navigate({ to: '/verify-email', search: { email: value.email, invitation } })
               return
             }
             setFormError(error.message)
@@ -67,8 +84,8 @@ function RouteComponent() {
     const result = await authClient.signIn.passkey({ returnWebAuthnResponse: true })
 
     if (!result?.error) {
-      await queryClient.invalidateQueries({ queryKey: authQueryKey })
-      navigate({ to: '/admin' })
+      await refreshSession(queryClient)
+      goToDestination()
       return
     }
 
@@ -145,7 +162,7 @@ function RouteComponent() {
 
       <p className="text-sm">
         {m['auth.login_no_account']()}{' '}
-        <Link to="/register" className="text-primary underline">
+        <Link to="/register" search={{ invitation }} className="text-primary underline">
           {m['auth.login_register_link']()}
         </Link>
       </p>

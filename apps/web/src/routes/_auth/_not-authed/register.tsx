@@ -5,7 +5,13 @@ import { authClient } from '#/auth/auth-client'
 import { useAppForm } from '#/hooks/use-form'
 import * as m from '#/paraglide/messages'
 
+const registerSearchSchema = z.object({
+  /** Invitation the visitor came from - handed on to the email verification step. */
+  invitation: z.string().optional(),
+})
+
 export const Route = createFileRoute('/_auth/_not-authed/register')({
+  validateSearch: registerSearchSchema,
   component: RouteComponent,
 })
 
@@ -17,6 +23,7 @@ const registerSchema = z.object({
 
 function RouteComponent() {
   const navigate = useNavigate()
+  const { invitation } = Route.useSearch()
   const [formError, setFormError] = useState<string | null>(null)
 
   const form = useAppForm({
@@ -38,7 +45,7 @@ function RouteComponent() {
         },
         {
           onSuccess: () => {
-            navigate({ to: '/verify-email', search: { email: value.email } })
+            navigate({ to: '/verify-email', search: { email: value.email, invitation } })
           },
           onError: ({ error }) => {
             setFormError(error.message)
@@ -98,7 +105,7 @@ function RouteComponent() {
 
       <p className="text-sm">
         {m['auth.register_has_account']()}{' '}
-        <Link to="/login" className="text-primary underline">
+        <Link to="/login" search={{ invitation }} className="text-primary underline">
           {m['auth.register_login_link']()}
         </Link>
       </p>

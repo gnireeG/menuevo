@@ -1,12 +1,28 @@
 import { useFieldContext } from '#/hooks/use-form'
 import { cn } from 'cn'
+import { Input } from '../ui/input'
 
-type TextFieldProps = {
+/**
+ * Input types whose value round-trips as a string via `e.target.value`.
+ * Excludes checkbox/radio/file/range/color and the button-like types,
+ * which this field cannot drive from a string form value.
+ */
+type TextFieldType =
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'search'
+  | 'tel'
+  | 'url'
+  | 'number'
+  | 'date'
+  | 'datetime-local'
+  | 'month'
+  | 'time'
+  | 'week'
+
+type TextFieldProps = React.ComponentProps<"input"> & {
   label?: string
-  type?: string
-  placeholder?: string
-  autoComplete?: string
-  readOnly?: boolean
 }
 
 export function TextField({ label, type = 'text', placeholder, autoComplete, readOnly }: TextFieldProps) {
@@ -20,7 +36,7 @@ export function TextField({ label, type = 'text', placeholder, autoComplete, rea
           {label}
         </label>
       )}
-      <input
+      <Input
         id={field.name}
         name={field.name}
         type={type}
@@ -30,10 +46,6 @@ export function TextField({ label, type = 'text', placeholder, autoComplete, rea
         value={field.state.value}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
-        className={cn(
-          'px-3 py-2 outline-none shadow-dark focus:shadow-dark-active focus:translate-0.5 transition-all border text-sm rounded-md',
-          readOnly && 'bg-muted text-muted-foreground cursor-not-allowed focus:shadow-dark focus:translate-0',
-        )}
       />
       {error && <span className="text-sm text-destructive mt-2 font-semibold">{error?.message ?? String(error)}</span>}
     </div>

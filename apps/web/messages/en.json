@@ -28,7 +28,27 @@
     "reset_password_otp_sent": "If an account exists for this address, we sent a code to it.",
     "reset_password_wrong_email": "Wrong email address?",
     "reset_password_back_to_login": "Back to login",
-    "reset_password_failed": "Password could not be changed. Please check the code."
+    "reset_password_failed": "Password could not be changed. Please check the code.",
+    "accept_invitation": {
+      "title": "You have been invited",
+      "description": "{inviter} invited you to join {restaurant} on MenuEvo.",
+      "invited_by": "Invited by {inviter}",
+      "invited_as": "Invitation for {email}",
+      "expires": "Valid until {date}",
+      "accept": "Accept invitation",
+      "reject": "Decline",
+      "reject_confirm": "Decline the invitation to {restaurant}? The link from the email stops working.",
+      "rejected_title": "Invitation declined",
+      "rejected_description": "You have declined the invitation. Nothing was shared with you.",
+      "loading": "Loading invitation…",
+      "unavailable_title": "Invitation not available",
+      "unavailable_description": "This invitation is no longer valid. It may have expired, been withdrawn, or already been used.",
+      "wrong_recipient_title": "Wrong account",
+      "wrong_recipient_description": "This invitation was sent to a different email address. You are signed in as {email}.",
+      "switch_account": "Sign in with another account",
+      "back_to_admin": "Go to dashboard",
+      "error_generic": "That did not work. Please try again."
+    }
   },
   "form_labels": {
     "name": "Name",
@@ -57,10 +77,27 @@
     },
     "restaurant": {
       "new_restaurant": "New restaurant"
+    },
+    "team": {
+      "invite_member": "Invite member",
+      "invite_member_description": "Team members can edit the menu and change the settings of the restaurant.",
+      "send_invite": "Send invite",
+      "members": "Members",
+      "active_members": "Active members",
+      "pending_invitations": "Pending invitations",
+      "invitation_expires_on": "Expires on {date}",
+      "resend_invite": "Resend",
+      "revoke_invite": "Revoke",
+      "revoke_invite_confirm": "Revoke the invitation for {email}? The link in the invitation mail stops working immediately.",
+      "no_pending_invitations": "No pending invitations."
     }
   },
   "general": {
-    "create": "Create"
+    "create": "Create",
+    "remove": "Remove",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel"
   },
   "profile": {
     "settings": {

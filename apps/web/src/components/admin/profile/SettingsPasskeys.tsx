@@ -3,8 +3,8 @@ import { aaguidQueryOptions, passkeysQueryKey, passkeysQueryOptions, resolveAagu
 import { Button } from "#/components/ui/button"
 import { Card, CardContent } from "#/components/ui/card"
 import { ConfirmButton } from "#/components/ui/confirm-button"
+import { formatDate } from "#/lib/utils"
 import { m } from "#/paraglide/messages"
-import { getLocale } from "#/paraglide/runtime.js"
 import { KeyIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -148,8 +148,4 @@ function AuthenticatorIcon({ authenticator }: { authenticator: AaguidEntry | und
             <img src={dark} alt="" aria-hidden className="hidden size-8 object-contain dark:block" />
         </div>
     )
-}
-
-function formatDate(date: Date | string) {
-    return new Intl.DateTimeFormat(getLocale(), { dateStyle: 'medium' }).format(new Date(date))
 }

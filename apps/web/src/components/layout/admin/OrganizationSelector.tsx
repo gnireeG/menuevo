@@ -1,6 +1,6 @@
 import { authClient } from "#/auth/auth-client"
 import { authQueryKey, useAuth } from "#/auth/query"
-import CreateRestaurantModal from "#/components/restaurant/CreateRestaurantModal"
+import CreateRestaurantModal from "#/components/admin/restaurant/CreateRestaurantModal"
 import { Button } from "#/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "#/components/ui/dropdown-menu"
 import { BuildingsIcon, CaretUpDownIcon } from "@phosphor-icons/react"

@@ -3,29 +3,36 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { z } from 'zod'
 import { authClient } from '#/auth/auth-client'
-import { authQueryKey } from '#/auth/query'
+import { refreshSession } from '#/auth/query'
 import { ResendOtpButton } from '#/components/auth/ResendOtpButton'
 import { useAppForm } from '#/hooks/use-form'
 import * as m from '#/paraglide/messages'
 
 const verifyEmailSearchSchema = z.object({
   email: z.email().optional(),
+  /** Invitation the user came from - accepting it needs a verified address first. */
+  invitation: z.string().optional(),
 })
 
 export const Route = createFileRoute('/_auth/verify-email')({
   validateSearch: verifyEmailSearchSchema,
   beforeLoad: ({ context, search }) => {
     if (context.session?.user.emailVerified) {
-      throw redirect({ to: '/admin' })
+      throw search.invitation
+        ? redirect({ to: '/accept-invitation', search: { id: search.invitation } })
+        : redirect({ to: '/admin' })
     }
     // Opened without `?email=` - recover it from the session, otherwise there
     // is nothing to verify and the user has to sign in first.
     if (!search.email) {
       const sessionEmail = context.session?.user.email
       if (!sessionEmail) {
-        throw redirect({ to: '/login' })
+        throw redirect({ to: '/login', search: { invitation: search.invitation } })
       }
-      throw redirect({ to: '/verify-email', search: { email: sessionEmail } })
+      throw redirect({
+        to: '/verify-email',
+        search: { email: sessionEmail, invitation: search.invitation },
+      })
     }
   },
   component: RouteComponent,
@@ -38,7 +45,7 @@ const verifyEmailSchema = z.object({
 
 function RouteComponent() {
   // `beforeLoad` guarantees the search param is present.
-  const { email = '' } = Route.useSearch()
+  const { email = '', invitation } = Route.useSearch()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [formError, setFormError] = useState<string | null>(null)
@@ -69,7 +76,11 @@ function RouteComponent() {
 
       // `autoSignInAfterVerification` creates the session, so the cached
       // session has to be refetched before we enter the guarded area.
-      await queryClient.invalidateQueries({ queryKey: authQueryKey })
+      await refreshSession(queryClient)
+      if (invitation) {
+        navigate({ to: '/accept-invitation', search: { id: invitation } })
+        return
+      }
       navigate({ to: '/admin' })
     },
   })

@@ -19,7 +19,7 @@ function RouteComponent() {
   return (
     <div className="flex min-h-dvh overflow-x-hidden">
       <Navbar />
-      <main className="p-2 sm:p-4"><Outlet /></main>
+      <main className="p-2 sm:p-4 grow"><Outlet /></main>
     </div>
   )
 }

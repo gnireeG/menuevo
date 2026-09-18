@@ -1,6 +1,6 @@
 import { PlusIcon } from "@phosphor-icons/react";
-import { Button } from "../ui/button";
-import { Flyout, FlyoutContent, FlyoutHeader, FlyoutTrigger } from "../ui/flyout";
+import { Button } from "../../ui/button";
+import { Flyout, FlyoutContent, FlyoutHeader, FlyoutTrigger } from "../../ui/flyout";
 import { m } from "#/paraglide/messages";
 import { useAppForm } from "#/hooks/use-form";
 import { useRestaurantsControllerCreate } from "shared-types";

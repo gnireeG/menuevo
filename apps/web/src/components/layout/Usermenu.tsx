@@ -6,7 +6,7 @@ import { useState } from "react";
 import { authClient } from "#/auth/auth-client";
 import { CaretUpDownIcon, GearSixIcon, SignInIcon, SignOutIcon } from "@phosphor-icons/react";
 import { Separator } from "#/components/ui/separator";
-import { authQueryKey } from "#/auth/query";
+import { clearSession } from "#/auth/query";
 
 export default function UserMenu(){
     const { user } = useRouteContext({from: '__root__'})
@@ -21,7 +21,7 @@ export default function UserMenu(){
     async function handleLogout() {
         setLogoutLoading(true)
         await authClient.signOut();
-        queryClient.setQueryData(authQueryKey, null)
+        clearSession(queryClient)
         await router.navigate({ to: "/" })
         await router.invalidate()
     }

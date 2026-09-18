@@ -1,3 +1,5 @@
+import Breadcrumbs from '#/components/admin/Breadcrumbs'
+import { m } from '#/paraglide/messages'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin/settings/subscription')({
@@ -5,5 +7,9 @@ export const Route = createFileRoute('/admin/settings/subscription')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/admin/settings/subscription"!</div>
+  return(
+    <div>
+      <Breadcrumbs items={[{label: m['admin.nav.settings'](), to: '/admin/settings'},{label: m['admin.nav.subscription']()}]} />
+    </div>
+  )
 }
