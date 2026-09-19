@@ -9,7 +9,7 @@ export default function Navbar(){
                     <Link to="/"><img src="/logo-menuevo.svg" className="h-8" /></Link>
                 </div>
                 <div>
-                    <UserMenu />
+                    <UserMenu trigger="avatar-only" />
                 </div>
             </div>
         </div>

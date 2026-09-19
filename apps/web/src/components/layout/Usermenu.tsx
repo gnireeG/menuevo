@@ -4,11 +4,13 @@ import { Button } from "#/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { authClient } from "#/auth/auth-client";
-import { CaretUpDownIcon, GearSixIcon, SignInIcon, SignOutIcon } from "@phosphor-icons/react";
+import { CaretUpDownIcon, GearSixIcon, SignInIcon, SignOutIcon, User } from "@phosphor-icons/react";
 import { Separator } from "#/components/ui/separator";
 import { clearSession } from "#/auth/query";
+import UserAvatar from "./UserAvatar";
+import { m } from "#/paraglide/messages";
 
-export default function UserMenu(){
+export default function UserMenu({trigger = 'default'} : {trigger?: 'default' | 'avatar-only'}){
     const { user } = useRouteContext({from: '__root__'})
 
     const [open, setOpen] = useState(false)
@@ -28,19 +30,26 @@ export default function UserMenu(){
 
     if(!user){
         return(
-            <Link to="/login"><Button variant="primary"><SignInIcon /></Button></Link>
+            <Link to="/login"><Button>{m['auth.register_login_link']()}</Button></Link>
         )
     }
 
     return(
         <DropdownMenu open={open} onOpenChange={(e) => setOpen(e)}>
             <DropdownMenuTrigger className="w-full" asChild>
-                <Button size="lg" className="w-full">{user.name}<CaretUpDownIcon /></Button>
+                {trigger === 'avatar-only' ? (
+                    <Button size="icon" variant="ghost" className="rounded-full"><UserAvatar /></Button>
+                ) : (
+                    <Button size="lg" className="w-full" variant="ghost"><UserAvatar size="sm" />{user.name}<CaretUpDownIcon /></Button>
+                )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] p-4 my-2 min-w-min" align="end">
-                <div>
-                    <p className="font-heading">{user.name}</p>
-                    <p className="text-xs">{user.email}</p>
+                <div className="flex items-center gap-2">
+                    <UserAvatar />
+                    <div>
+                        <p className="font-heading">{user.name}</p>
+                        <p className="text-xs">{user.email}</p>
+                    </div>
                 </div>
                 <Separator />
                 <DropdownMenuGroup className="space-y-2">
